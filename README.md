@@ -46,3 +46,14 @@ kubectl port-forward svc/dev-tasklist 8082:80
 # Zeebe
 kubectl port-forward svc/dev-zeebe-gateway 26500:26500
 ```
+
+Test access to the Zeebe Cluster
+
+```shell
+# Use a gRPC library 
+brew install grpcurl 
+# Download a proto buffer file 
+curl -sSL https://raw.githubusercontent.com/camunda-cloud/zeebe/develop/gateway-protocol/src/main/proto/gateway.proto > gateway.proto
+# Test
+grpcurl -proto gateway.proto $ADDRESS gateway_protocol.Gateway.Topology
+```

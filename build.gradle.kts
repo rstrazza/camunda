@@ -12,6 +12,7 @@ version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 val springZeebeVersion = "8.1.13"
+val jacksonVersion = "2.14.+"
 
 repositories {
 	mavenCentral()
@@ -24,8 +25,10 @@ dependencies {
 
 	// SpringBoot
 	implementation("org.springframework.boot:spring-boot-starter")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+
+	// Web
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
 
 	// Logging
 	implementation("io.github.microutils:kotlin-logging:3.0.4")
@@ -33,6 +36,10 @@ dependencies {
 
 	// Camunda
 	implementation("io.camunda:spring-zeebe-starter:$springZeebeVersion")
+
+	// Test
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("io.camunda:spring-zeebe-test:$springZeebeVersion")
 }
 
 tasks.withType<KotlinCompile> {

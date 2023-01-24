@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/v1")
 @EnableZeebeClient
 class StatusController(@Autowired private val client: ZeebeClient) {
 
@@ -18,7 +17,7 @@ class StatusController(@Autowired private val client: ZeebeClient) {
         return ResponseEntity.ok("ok")
     }
 
-    @GetMapping("/status")
+    @GetMapping("/camunda/status")
     fun status(): ResponseEntity<String> {
         val topology = client.newTopologyRequest().send().join()
         return ResponseEntity.ok(topology.toString())
