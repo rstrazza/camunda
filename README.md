@@ -31,6 +31,9 @@ and run:
 ```shell
 helm install dev camunda/camunda-platform \
     -f camunda-platform-core-kind-values.yaml
+
+helm upgrade dev camunda/camunda-platform \
+    -f camunda-platform-core-kind-values.yaml    
 ```
 
 * Wait until all pods are up and running
@@ -56,4 +59,14 @@ brew install grpcurl
 curl -sSL https://raw.githubusercontent.com/camunda-cloud/zeebe/develop/gateway-protocol/src/main/proto/gateway.proto > gateway.proto
 # Test
 grpcurl -proto gateway.proto $ADDRESS gateway_protocol.Gateway.Topology
+```
+
+### exporters
+
+Deploy Kibana for easy access to the Elasticsearch exporter data:
+
+```shell
+kubectl apply -f kibana.yaml
+
+kubectl port-forward svc/kibana 5601:5601
 ```
