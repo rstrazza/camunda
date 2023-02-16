@@ -1,5 +1,7 @@
 # Camunda
 
+This monorepo contains applications covering different aspects of Camunda capabilities.
+
 ## Deployment
 
 ### localhost
@@ -70,3 +72,8 @@ kubectl apply -f kibana.yaml
 
 kubectl port-forward svc/kibana 5601:5601
 ```
+
+## Links
+
+* [zeebe-chaos](https://zeebe-io.github.io/zeebe-chaos/)
+* [Zeebe.io — a horizontally scalable distributed workflow engine](https://blog.bernd-ruecker.com/zeebe-io-a-horizontally-scalable-distributed-workflow-engine-45788a90d549)
