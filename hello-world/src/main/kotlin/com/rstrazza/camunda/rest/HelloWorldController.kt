@@ -20,7 +20,9 @@ private val logger = KotlinLogging.logger { }
 @EnableZeebeClient
 class HelloWorldController(@Autowired private val client: ZeebeClient) {
 
-    private val HELLO_WORLD_BPMN_PROCESS_ID = "hello-world-process"
+    companion object {
+        const val HELLO_WORLD_BPMN_PROCESS_ID = "hello-world-process"
+    }
 
     @PutMapping("/hello-world")
     fun helloWorld(@RequestBody request: SampleMessageRequest): ResponseEntity<SampleMessageResponse> {
