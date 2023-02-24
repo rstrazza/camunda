@@ -58,7 +58,10 @@ class LoanOriginationController(
             result.variablesAsMap["loanApplicationId"] as String,
             result.processInstanceKey,
             result.variablesAsMap["creditScore"] as Int,
-            objectMapper.convertValue(result.variablesAsMap["loanApplicationStatus"], LoanApplicationStatus::class.java),
+            objectMapper.convertValue(
+                result.variablesAsMap["loanApplicationStatus"],
+                LoanApplicationStatus::class.java
+            ),
 //            request
         )
 
