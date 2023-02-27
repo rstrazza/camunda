@@ -1,4 +1,4 @@
-package com.rstrazza.camunda.rest
+package com.rstrazza.camunda.controller
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping

@@ -10,10 +10,7 @@ import io.camunda.zeebe.spring.client.EnableZeebeClient
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 private val logger = KotlinLogging.logger { }
 
@@ -35,7 +32,7 @@ class LoanOriginationController(
         const val LOAN_ORIGINATION_PROCESS = "loan_origination_process"
     }
 
-    @PutMapping("/application")
+    @PostMapping("/application")
     fun loanApplication(@RequestBody request: LoanApplicationRequest): ResponseEntity<LoanApplicationResponse> {
         logger.info("Loan Application Request: ${objectMapper.writeValueAsString(request)} ")
 

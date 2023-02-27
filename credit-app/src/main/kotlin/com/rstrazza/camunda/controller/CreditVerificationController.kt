@@ -1,4 +1,4 @@
-package com.rstrazza.camunda.rest
+package com.rstrazza.camunda.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.rstrazza.camunda.model.CreditVerificationRequest
@@ -53,7 +53,7 @@ class CreditVerificationController(
         )
 
         logger.info("wait some time...")
-        delay(10000L)
+        delay(1000L)
         logger.info("done waiting!")
 
         val response = restTemplate.postForEntity(
