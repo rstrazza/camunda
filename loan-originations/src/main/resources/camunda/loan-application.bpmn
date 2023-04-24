@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_03zxrlw" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.7.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.1.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_03zxrlw" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.10.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.1.0">
   <bpmn:collaboration id="loan_originations">
     <bpmn:participant id="loan_origination" name="Loan Origination" processRef="loan_origination_process" />
     <bpmn:participant id="lender_application_participant" name="Lender Application">
@@ -14,20 +14,17 @@
     <bpmn:group id="credit_verification_group" categoryValueRef="CategoryValue_0u5niqf" />
   </bpmn:collaboration>
   <bpmn:process id="loan_origination_process" name="loan_origination_process" isExecutable="true">
+    <bpmn:extensionElements />
     <bpmn:startEvent id="StartEvent_LoanApplication_Requested" name="Loan Application Requested">
       <bpmn:outgoing>Flow_0s28fz8</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:endEvent id="Event_19f4pwm" name="Loan Application Processed">
-      <bpmn:incoming>Flow_16gr1eb</bpmn:incoming>
-      <bpmn:incoming>Flow_14gzfxt</bpmn:incoming>
-    </bpmn:endEvent>
     <bpmn:exclusiveGateway id="Gateway_0k7dm43" name="Is Loan Approved?" default="Flow_1jo2nlo">
       <bpmn:incoming>Flow_1yesoss</bpmn:incoming>
       <bpmn:outgoing>Flow_1jo2nlo</bpmn:outgoing>
       <bpmn:outgoing>Flow_1lh5ipf</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_0s28fz8" sourceRef="StartEvent_LoanApplication_Requested" targetRef="create_loan_application" />
-    <bpmn:sequenceFlow id="Flow_16gr1eb" sourceRef="set_ineligible_loan" targetRef="Event_19f4pwm" />
+    <bpmn:sequenceFlow id="Flow_16gr1eb" sourceRef="set_ineligible_loan" targetRef="review_decline" />
     <bpmn:sequenceFlow id="Flow_1yesoss" sourceRef="loan_eligibility" targetRef="Gateway_0k7dm43" />
     <bpmn:sequenceFlow id="Flow_1jo2nlo" name="No" sourceRef="Gateway_0k7dm43" targetRef="set_ineligible_loan" />
     <bpmn:serviceTask id="create_loan_application" name="Create Loan Application">
@@ -76,6 +73,16 @@
       <bpmn:incoming>Flow_0dyxhl6</bpmn:incoming>
       <bpmn:outgoing>Flow_1swd8oz</bpmn:outgoing>
     </bpmn:sendTask>
+    <bpmn:sequenceFlow id="Flow_1yye1bv" sourceRef="review_decline" targetRef="Event_19f4pwm" />
+    <bpmn:endEvent id="Event_19f4pwm" name="Loan Application Processed">
+      <bpmn:incoming>Flow_14gzfxt</bpmn:incoming>
+      <bpmn:incoming>Flow_1yye1bv</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="review_decline" name="Review Decline">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_16gr1eb</bpmn:incoming>
+      <bpmn:outgoing>Flow_1yye1bv</bpmn:outgoing>
+    </bpmn:userTask>
   </bpmn:process>
   <bpmn:message id="Message_16sk623" name="credit-verification-received">
     <bpmn:extensionElements>
@@ -88,7 +95,7 @@
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="loan_originations">
       <bpmndi:BPMNShape id="Participant_1ymvjnh_di" bpmnElement="loan_origination" isHorizontal="true">
-        <dc:Bounds x="160" y="79" width="1300" height="391" />
+        <dc:Bounds x="160" y="79" width="1430" height="391" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_LoanApplication_Requested">
@@ -97,28 +104,22 @@
           <dc:Bounds x="200" y="225" width="81" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_19f4pwm_di" bpmnElement="Event_19f4pwm">
-        <dc:Bounds x="1382" y="182" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1360" y="152" width="81" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0925opa_di" bpmnElement="request_loan_terms">
-        <dc:Bounds x="1220" y="160" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0k7dm43_di" bpmnElement="Gateway_0k7dm43" isMarkerVisible="true">
         <dc:Bounds x="1085" y="175" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1083" y="136" width="54" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1dq4khm_di" bpmnElement="loan_eligibility">
-        <dc:Bounds x="910" y="160" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1xhkiio_di" bpmnElement="create_loan_application">
         <dc:Bounds x="340" y="160" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0925opa_di" bpmnElement="request_loan_terms">
+        <dc:Bounds x="1220" y="160" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1dq4khm_di" bpmnElement="loan_eligibility">
+        <dc:Bounds x="910" y="160" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0kie0na_di" bpmnElement="set_ineligible_loan">
@@ -132,25 +133,23 @@
         <dc:Bounds x="530" y="160" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_19f4pwm_di" bpmnElement="Event_19f4pwm">
+        <dc:Bounds x="1472" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1450" y="152" width="81" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0vo2qko_di" bpmnElement="review_decline">
+        <dc:Bounds x="1330" y="340" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0s28fz8_di" bpmnElement="Flow_0s28fz8">
         <di:waypoint x="258" y="200" />
         <di:waypoint x="340" y="200" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_16gr1eb_di" bpmnElement="Flow_16gr1eb">
         <di:waypoint x="1160" y="380" />
-        <di:waypoint x="1400" y="380" />
-        <di:waypoint x="1400" y="218" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_14gzfxt_di" bpmnElement="Flow_14gzfxt">
-        <di:waypoint x="1320" y="200" />
-        <di:waypoint x="1382" y="200" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1lh5ipf_di" bpmnElement="Flow_1lh5ipf">
-        <di:waypoint x="1135" y="200" />
-        <di:waypoint x="1220" y="200" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1169" y="182" width="18" height="14" />
-        </bpmndi:BPMNLabel>
+        <di:waypoint x="1330" y="380" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1yesoss_di" bpmnElement="Flow_1yesoss">
         <di:waypoint x="1010" y="200" />
@@ -167,6 +166,17 @@
         <di:waypoint x="440" y="200" />
         <di:waypoint x="530" y="200" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1lh5ipf_di" bpmnElement="Flow_1lh5ipf">
+        <di:waypoint x="1135" y="200" />
+        <di:waypoint x="1220" y="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1169" y="182" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_14gzfxt_di" bpmnElement="Flow_14gzfxt">
+        <di:waypoint x="1320" y="200" />
+        <di:waypoint x="1472" y="200" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0hwedzm_di" bpmnElement="Flow_0hwedzm">
         <di:waypoint x="800" y="200" />
         <di:waypoint x="910" y="200" />
@@ -175,6 +185,11 @@
         <di:waypoint x="630" y="200" />
         <di:waypoint x="700" y="200" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1yye1bv_di" bpmnElement="Flow_1yye1bv">
+        <di:waypoint x="1430" y="380" />
+        <di:waypoint x="1490" y="380" />
+        <di:waypoint x="1490" y="218" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Participant_1q2j1yq_di" bpmnElement="lender_application_participant" isHorizontal="true">
         <dc:Bounds x="1120" y="590" width="300" height="60" />
         <bpmndi:BPMNLabel />
@@ -182,6 +197,12 @@
       <bpmndi:BPMNShape id="BPMNShape_0m6b61o" bpmnElement="credit_application_participant" isHorizontal="true">
         <dc:Bounds x="500" y="590" width="320" height="60" />
         <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Group_0ymotfs_di" bpmnElement="credit_verification_group">
+        <dc:Bounds x="490" y="110" width="340" height="240" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="616" y="117" width="88" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0fveygc_di" bpmnElement="Flow_0fveygc">
         <di:waypoint x="1270" y="240" />
@@ -195,12 +216,6 @@
         <di:waypoint x="750" y="590" />
         <di:waypoint x="750" y="240" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Group_0ymotfs_di" bpmnElement="credit_verification_group">
-        <dc:Bounds x="490" y="110" width="340" height="240" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="616" y="117" width="88" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>

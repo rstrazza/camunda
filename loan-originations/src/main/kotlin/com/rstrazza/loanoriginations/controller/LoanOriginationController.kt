@@ -59,7 +59,6 @@ class LoanOriginationController(
                 result.variablesAsMap["loanApplicationStatus"],
                 LoanApplicationStatus::class.java
             ),
-//            request
         )
 
         return ResponseEntity.ok(response)

@@ -39,7 +39,8 @@ class CreditVerificationController(
     }
 
     /**
-     *
+     * Call the loan-application via REST for simplicity,
+     * ideally this would be via a messaging platform
      */
     suspend fun verifyCredit(request: CreditVerificationRequest) {
         logger.info("verify-credit")

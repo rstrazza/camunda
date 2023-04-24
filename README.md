@@ -1,12 +1,18 @@
 # Camunda
 
-This monorepo contains applications covering different aspects of Camunda capabilities.
+This monorepo contains applications to simulate different aspects of Camunda capabilities.
+
+- `hello-world`: the name says it all
+- `loan-originations`: the main Camunda application containing the BPMN and DMN
+- `credit-app`: the external application demonstrating Camunda integrations
 
 ## Deployment
 
-### localhost
+### Running Camunda on localhost
 
 * Container runtime using [colima](https://github.com/abiosoft/colima):
+
+*skip this step if you already have a kubernetes runtime available, such as Docker or Rancher Desktop*
 
 ```shell
 brew install colima
@@ -26,16 +32,17 @@ helm repo add camunda https://helm.camunda.io
 helm repo update
 ```
 
-* Download the [camunda-platform-core-kind-values](https://github.com/camunda/camunda-platform-helm/blob/main/kind/camunda-platform-core-kind-values.yaml) 
-YAML file and remove/comment out the `elasticsearch -> volumeClaimTemplate -> storageClassName: "standard"`
-and run:
+* deploy camunda:
+
+*alternatively, download the [camunda-platform-core-kind-values](https://github.com/camunda/camunda-platform-helm/blob/main/kind/camunda-platform-core-kind-values.yaml)
+YAML file and remove/comment out the `elasticsearch -> volumeClaimTemplate -> storageClassName: "standard"`*
 
 ```shell
 helm install dev camunda/camunda-platform \
-    -f camunda-platform-core-kind-values.yaml
+    -f k8s/local/camunda-platform-core-kind-values.yaml
 
 helm upgrade dev camunda/camunda-platform \
-    -f camunda-platform-core-kind-values.yaml    
+    -f k8s/local/camunda-platform-core-kind-values.yaml    
 ```
 
 * Wait until all pods are up and running
@@ -51,6 +58,11 @@ kubectl port-forward svc/dev-tasklist 8082:80
 # Zeebe
 kubectl port-forward svc/dev-zeebe-gateway 26500:26500
 ```
+
+Web Browser based services:
+
+* Operate: http://localhost:8081/
+* Tasklist: http://localhost:8082/
 
 Test access to the Zeebe Cluster
 
@@ -68,10 +80,14 @@ grpcurl -proto gateway.proto $ADDRESS gateway_protocol.Gateway.Topology
 Deploy Kibana for easy access to the Elasticsearch exporter data:
 
 ```shell
-kubectl apply -f kibana.yaml
+kubectl apply -f k8s/local/kibana.yaml
 
 kubectl port-forward svc/kibana 5601:5601
 ```
+
+### Running the sample applications on localhost
+
+* Start `credit-app` and `loan-originations`
 
 ## Links
 

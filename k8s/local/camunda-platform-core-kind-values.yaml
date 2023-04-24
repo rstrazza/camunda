@@ -12,9 +12,9 @@ identity:
 optimize:
   enabled: false
 
-operate:
-  image:
-    tag: 8.2.0-alpha3
+#operate:
+#  image:
+#    tag: 8.2.0-alpha3
 
 # Reduce for Zeebe and Gateway the configured replicas and with that the required resources
 # to get it running locally
@@ -42,6 +42,12 @@ zeebe:
 
 zeebe-gateway:
   replicas: 1
+
+connectors:
+  replicas: 1
+  enabled: false
+  inbound:
+    mode: disabled
 
 # Configure elastic search to make it running for local development
 elasticsearch:
